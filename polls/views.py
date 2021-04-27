@@ -67,7 +67,7 @@ class ChoiceView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAdminUser]
 
     def get_queryset(self):
-        question = get_object_or_404(Question, id=self.kwargs['pk'])
+        question = get_object_or_404(Question, pk=self.kwargs['pk'])
         return question.choices.all()
 
     def perform_create(self, serializer):
@@ -87,11 +87,7 @@ class AnswerCreateView(generics.CreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get_serializer_class(self):
-        question = get_object_or_404(
-            Question,
-            pk=self.kwargs['question_pk'],
-            poll__id=self.kwargs['id'],
-        )
+        question = get_object_or_404(Question, pk=self.kwargs['pk'])
         if question.type_question == 'text_answer':
             return AnswerTextSerializer
         elif question.type_question == 'one_choice':
@@ -100,9 +96,5 @@ class AnswerCreateView(generics.CreateAPIView):
             return AnswerFewChoiceSerializer
 
     def perform_create(self, serializer):
-        question = get_object_or_404(
-            Question,
-            pk=self.kwargs['question_pk'],
-            poll__id=self.kwargs['id'],
-        )
-        serializer.save(author=self.request.user, question=question)
+        question = get_object_or_404(Question, pk=self.kwargs['pk'])
+        serializer.save(user=self.request.user, question=question)

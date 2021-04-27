@@ -1,4 +1,3 @@
-from django.db.models import Q
 from rest_framework import serializers
 from rest_framework.relations import PrimaryKeyRelatedField
 
@@ -37,10 +36,8 @@ class AnswerSerializer(serializers.ModelSerializer):
 
 
 class AnswerTextSerializer(serializers.ModelSerializer):
-    one_choice = PrimaryKeyRelatedField(many=False, queryset=Choice.objects.all())
-
     class Meta:
-        fields = ['text_answer']
+        fields = ['text']
         model = Answer
 
 
@@ -53,7 +50,7 @@ class AnswerOneChoiceSerializer(serializers.ModelSerializer):
 
 
 class AnswerFewChoiceSerializer(serializers.ModelSerializer):
-    many_choice = PrimaryKeyRelatedField(many=True, queryset=Choice.objects.all())
+    few_choice = PrimaryKeyRelatedField(many=True, queryset=Choice.objects.all())
 
     class Meta:
         fields = ['few_choice']
